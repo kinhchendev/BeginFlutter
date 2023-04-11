@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -62,6 +64,7 @@ class _HomePageState extends State<HomePage> {
           _transformScaleAndTranslate(),
           _transformMatrix4(),
           _positionedStatusBar(context),
+          _positionedInkWellAndInkResponse(context),
         ],
       ),
       onScaleStart: _onScaleStart,
@@ -113,6 +116,54 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Positioned _positionedInkWellAndInkResponse(BuildContext context) {
+    return Positioned(
+      top: 50.0,
+      width: MediaQuery.of(context).size.width,
+      child: Container(
+        color: Colors.white54,
+        height: 56.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            InkWell(
+              splashColor: Colors.lightGreenAccent,
+              highlightColor: Colors.lightBlueAccent,
+              onTap: _setScaleSmall,
+              onDoubleTap: _setScaleBig,
+              onLongPress: _onLongPress,
+              child: Container(
+                height: 48.0,
+                width: 128.0,
+                color: Colors.black12,
+                child: const Icon(
+                  Icons.touch_app,
+                  size: 32.0,
+                ),
+              ),
+            ),
+            InkResponse(
+              splashColor: Colors.lightGreenAccent,
+              highlightColor: Colors.lightBlueAccent,
+              onTap: _setScaleSmall,
+              onDoubleTap: _setScaleBig,
+              onLongPress: _onLongPress,
+              child: Container(
+                height: 48.0,
+                width: 128.0,
+                color: Colors.black12,
+                child: const Icon(
+                  Icons.touch_app,
+                  size: 32.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _onScaleStart(ScaleStartDetails details) {
     print('ScaleStartDetails: $details');
     _startLastOffset = details.focalPoint;
@@ -141,6 +192,7 @@ class _HomePageState extends State<HomePage> {
           _lastScale;
       Offset currentOffset = details.focalPoint - (offsetAdjustedForScale *
           _currentScale);
+
       setState(() {
         _currentOffset = currentOffset;
       });
@@ -178,4 +230,15 @@ class _HomePageState extends State<HomePage> {
     _currentScale = 1.0;
   }
 
+  void _setScaleSmall() {
+    setState(() {
+      _currentScale = 0.5;
+    });
+  }
+
+  void _setScaleBig() {
+    setState(() {
+      _currentScale = 16.0;
+    });
+  }
 }
