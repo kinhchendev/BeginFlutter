@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:journal/models/journal.dart';
 import 'package:journal/services/db_filestore_api.dart';
+import 'package:flutter/material.dart';
 
 class JournalEditBloc {
   final DbApi dbApi;
@@ -8,7 +9,7 @@ class JournalEditBloc {
   Journal selectedJournal;
 
   JournalEditBloc(this.add, this.selectedJournal, this.dbApi) {
-
+    _startEditListeners().then((finished) => _getJournal(add, selectedJournal));
   }
 
   final StreamController<String> _dateController =
@@ -40,6 +41,7 @@ class JournalEditBloc {
 
   Future<bool> _startEditListeners() async {
     _dateController.stream.listen((date) {
+      debugPrint('dateController listener newDate = $date');
       selectedJournal.date = date;
     });
     _moodController.stream.listen((mood) {

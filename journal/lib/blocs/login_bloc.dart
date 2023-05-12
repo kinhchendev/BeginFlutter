@@ -5,6 +5,7 @@ import 'package:journal/services/authentication_api.dart';
 
 class LoginBloc with Validators {
   final AuthenticationApi authenticationApi;
+  final BuildContext context;
   String _email = '';
   String _password = '';
   bool _emailValid = false;
@@ -39,7 +40,7 @@ class LoginBloc with Validators {
   Sink<String> get loginOrCreateChanged => _loginOrCreateController.sink;
   Stream<String> get loginOrCreate => _loginOrCreateController.stream;
 
-  LoginBloc(this.authenticationApi) {
+  LoginBloc(this.authenticationApi, this.context) {
     _startListenersIfEmailPasswordAreValid();
   }
 
@@ -91,8 +92,9 @@ class LoginBloc with Validators {
           .then((user) {
             result = 'Success';
           }).catchError((error) {
-            debugPrint('Login error: $error');
-            result = error;
+            // debugPrint('Login error: $error');
+            // result = error;
+            _showToast('Email and/or password are not correct. Please try again.');
           });
       return result;
     } else {
@@ -105,20 +107,31 @@ class LoginBloc with Validators {
     if (_emailValid && _passwordValid) {
       await authenticationApi.createUserWithEmailAndPassword(email: _email, password: _password)
           .then((user) {
-            debugPrint('Created user: $user');
+            debugPrint('Created account: $user');
             result = 'Created user: $user';
             authenticationApi.signInWithEmailAndPassword(email: _email, password: _password)
             .then((user) {
             }).catchError((error) {
-              debugPrint('Login error: $error');
-              result = error;
+              debugPrint('Login user error: $error');
+              // result = error;
             });
           }).catchError((error) {
             debugPrint('Creating user error: $error');
+            _showToast('Email are already in use by another account.');
           });
       return result;
     } else {
       return 'Error creating user';
     }
+  }
+
+  void _showToast(String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        // action: SnackBarAction(label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
   }
 }

@@ -19,8 +19,10 @@ class DbFireStoreService implements DbApi {
         .where('uid', isEqualTo: uid)
         .snapshots()
         .map((snapshot) {
-            List<Journal> journalDocs = snapshot.docs.map((doc) =>
-              Journal.fromDoc(doc)).toList();
+            List<Journal> journalDocs = snapshot.docs.map((doc) {
+              return Journal.fromDoc(doc);
+            }).toList();
+
             journalDocs.sort((doc1, doc2) => doc2.date.compareTo(doc1.date));
             return journalDocs;
         });

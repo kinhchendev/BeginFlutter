@@ -6,15 +6,15 @@ class HomeBlocProvider extends InheritedWidget {
   final String uid;
 
   const HomeBlocProvider({
-    required Key key,
+    Key? key,
     required Widget child,
     required this.homeBloc,
     required this.uid}) :
       super(key: key, child: child);
 
-  static HomeBlocProvider of (BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType()
-      as HomeBlocProvider);
+  static HomeBlocProvider? of (BuildContext context) {
+    debugPrint('static HomeBlocProvider');
+    return context.dependOnInheritedWidgetOfExactType<HomeBlocProvider>();
   }
 
   @override

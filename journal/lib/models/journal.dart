@@ -14,7 +14,7 @@ class Journal {
   });
 
   factory Journal.fromDoc(dynamic doc) => Journal(
-    documentID: doc.documentID,
+    documentID: doc.id,
     date: doc["date"],
     mood: doc["mood"],
     note: doc["note"],

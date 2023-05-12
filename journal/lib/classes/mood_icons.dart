@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 
 class MoodIcons {
+  final String? title;
+  final Color? color;
+  final double? rotation;
+  final IconData? icon;
 
+  const MoodIcons({ this.title,  this.color,  this.rotation,  this.icon});
 
-  final String title;
-  final Color color;
-  final double rotation;
-  final IconData icon;
-
-  const MoodIcons({required this.title, required this.color, required this.rotation, required this.icon});
-
-  IconData getMoodIcon(String mood) {
+  IconData? getMoodIcon(String mood) {
     return _moodIconsList[_moodIconsList.indexWhere((icon) => icon.title == mood)].icon;
   }
 
-  Color getMoodColor(String mood) {
+  Color? getMoodColor(String mood) {
     return _moodIconsList[_moodIconsList.indexWhere((icon) => icon.title == mood)].color;
   }
 
   double getMoodRotation(String mood) {
-    return _moodIconsList[_moodIconsList.indexWhere((icon) => icon.title == mood)].rotation;
+    return _moodIconsList[_moodIconsList.indexWhere((icon) => icon.title == mood)].rotation!;
   }
 
   List<MoodIcons> getMoodIconList() {

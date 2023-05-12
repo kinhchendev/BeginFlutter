@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:journal/services/authentication_api.dart';
 import 'package:journal/services/db_filestore_api.dart';
 import 'package:journal/models/journal.dart';
@@ -15,6 +16,13 @@ class HomeBloc {
       StreamController<Journal>.broadcast();
   Sink<Journal> get deleteJournal => _journalDeleteController.sink;
   HomeBloc(this.dbApi, this.authenticationApi) {
+    debugPrint('HomeBloc constructor');
+    if (this.dbApi == null) {
+      debugPrint('dbApi == null');
+    }
+    if (this.authenticationApi == null) {
+      debugPrint('authenticationApi == null');
+    }
     _startListeners();
   }
 
@@ -25,8 +33,11 @@ class HomeBloc {
 
   void _startListeners() {
     // Retrieve Firestore Journal Records as List<Journal> not DocumentSnapshot
+    debugPrint('HomeBloc startListeners');
     User? user = authenticationApi.getFirebaseAuth().currentUser;
+    debugPrint('HomeBloc user = $user');
     dbApi.getJournalList(user!.uid).listen((journalDocs) {
+      debugPrint('HomeBloc getJournalList response journalDocs = $journalDocs');
       _addListJournal.add(journalDocs);
     });
 
